@@ -1,0 +1,31 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-Wall",
+      "-Wextra",
+      "-Werror=switch",
+      "-Wfatal-errors",
+      "-ggdb",
+      "-O0",
+      "-fsanitize=address",
+      "-I/usr/include/ImageMagick-7",
+      "-fopenmp",
+      "-DMAGICKCORE_HDRI_ENABLE=1",
+      "-DMAGICKCORE_QUANTUM_DEPTH=16",
+      "-DMAGICKCORE_CHANNEL_MASK_DEPTH=32",
+      "-I/usr/include/ImageMagick-7",
+      "-fopenmp",
+      "-DMAGICKCORE_HDRI_ENABLE=1",
+      "-DMAGICKCORE_QUANTUM_DEPTH=16",
+      "-DMAGICKCORE_CHANNEL_MASK_DEPTH=32",
+      "-o",
+      "terminal_picture_render",
+      "main.cpp"
+    ],
+    "directory": "/home/phil/dev/src/terminal_picture_render",
+    "file": "/home/phil/dev/src/terminal_picture_render/main.cpp",
+    "output": "/home/phil/dev/src/terminal_picture_render/terminal_picture_render"
+  }
+]
