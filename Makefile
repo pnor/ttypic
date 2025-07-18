@@ -11,12 +11,12 @@ BEAR=bear
 LINKER_FLAGS=
 MAGICK_FLAGS=`Magick++-config --cppflags --cxxflags --ldflags --libs`
 
-FLAGS=-Wall -Wextra -Werror=switch -Wfatal-errors
+FLAGS=-std=c++23 -Wall -Wextra -Werror=switch -Wfatal-errors
 DEBUG_FLAGS=-ggdb -O0 -fsanitize=address
 RELEASE_FLAGS=-O3 -march=native -fno-trapping-math -fno-math-errno -flto -fomit-frame-pointer
 
 SOURCES=main.cpp
-OUTPUT=terminal_picture_render
+OUTPUT=ttypic
 
 dev: check build
 	echo "Done ~"
