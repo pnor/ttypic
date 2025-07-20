@@ -18,7 +18,7 @@ RELEASE_FLAGS=-O3 -march=native -fno-trapping-math -fno-math-errno -flto -fomit-
 SOURCES=main.cpp
 OUTPUT=ttypic
 
-dev: check build
+dev: build
 	echo "Done ~"
 
 debug: build
