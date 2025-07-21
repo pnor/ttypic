@@ -111,9 +111,9 @@ namespace {
     for (UInt j = 0; j < targetDim.height; j++) {
       for (UInt i = 0; i < targetDim.width; i++) {
         const Decimal percentX =
-          static_cast<Decimal>(i) / static_cast<Decimal>(termWidth);
+          static_cast<Decimal>(i) / static_cast<Decimal>(targetDim.width);
         const Decimal percentY =
-          static_cast<Decimal>(j) / static_cast<Decimal>(termHeight);
+          static_cast<Decimal>(j) / static_cast<Decimal>(targetDim.height);
 
         const auto imgX = static_cast<UInt>(
           percentX * static_cast<Decimal>(image.size().width()));

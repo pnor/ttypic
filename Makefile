@@ -1,5 +1,5 @@
 ##
-# Terminal Picture Render
+# ttypic
 #
 # @file
 # @version 0.1
