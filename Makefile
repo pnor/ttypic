@@ -29,6 +29,9 @@ debug: build
 fast: build-fast
 	./${OUTPUT} ${TEST_IMAGE}
 
+profile: build-fast
+	flamegraph -- ./${OUTPUT} ${TEST_IMAGE}
+
 check:
 	${CLANG_TIDY} ${SOURCES}
 
@@ -36,7 +39,7 @@ build:
 	${BEAR} -- ${COMPILER} -I${INCLUDE_DIR} ${SOURCES} \
 	${FLAGS} ${DEBUG_FLAGS} ${LINKER_FLAGS} ${MAGICK_FLAGS} -o ${OUTPUT}
 
-build-fast: fast
+build-fast:
 	${COMPILER} -I${INCLUDE_DIR} ${SOURCES} \
 	-O3 \
 	${FLAGS} ${RELEASE_FLAGS} ${LINKER_FLAGS} ${MAGICK_FLAGS} -o ${OUTPUT}

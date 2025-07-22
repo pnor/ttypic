@@ -11,6 +11,7 @@
 
 namespace {
 
+  using SmallUInt = uint8_t;
   using UInt = uint16_t;
   using Decimal = float;
 
@@ -34,7 +35,7 @@ namespace {
   std::filesystem::path
   getImageFromCmdlineArgs(const argparse::ArgumentParser &program) {
     const auto &path = program.get<std::string>("image_path");
-    return std::filesystem::path(path);
+    return { path };
   }
 
   Dimensions getTerminalSize() {
@@ -43,8 +44,8 @@ namespace {
 #ifdef TIOCGSIZE
     struct ttysize termSize{};
     ioctl(STDIN_FILENO, TIOCGSIZE, &termSize);
-    cols = termSize.termSize_cols;
-    lines = termSize.termSize_lines;
+    cols = termSize.ts_cols;
+    lines = termSize.ts_lines;
 #elif defined(TIOCGWINSZ)
     struct winsize termSize{};
     // NOLINTNEXTLINE
@@ -96,18 +97,19 @@ namespace {
     try {
       const Magick::Image image(imagePath.c_str());
       return image;
-    } catch (const std::exception& _) {
+    } catch (const std::exception& exc) {
       std::cout << imagePath.c_str() << " is not a valid image!" << "\n";
       exit(1);
     }
   }
 
   void printImageArt(const std::filesystem::path &imagePath, const UInt termWidth,
-                     const UInt termHeight, const char glyph) {
+                     const UInt termHeight, const std::string_view glyphs) {
     const Magick::Image image = getImage(imagePath);
     const Dimensions targetDim =
       determineImageSize(image.size(), termWidth, termHeight);
 
+    SmallUInt glyphCount = 0;
     for (UInt j = 0; j < targetDim.height; j++) {
       for (UInt i = 0; i < targetDim.width; i++) {
         const Decimal percentX =
@@ -130,9 +132,11 @@ namespace {
                                                MAGICK_QUANTUM_RANGE);
 
         const std::string colorText =
-          std::format("\x1b[38;2;{};{};{}m{}\x1b[0m", red, green, blue, glyph);
+          std::format("\x1b[38;2;{};{};{}m{}\x1b[0m", red, green, blue, glyphs[glyphCount]);
 
         std::cout << colorText;
+
+        glyphCount = (glyphCount + 1) % glyphs.size();
       }
       std::cout << "\n";
     }
@@ -155,7 +159,7 @@ auto main(int argc, char *argv[]) -> int {
     .scan<'i', int>();
 
   program.add_argument("-g", "--glyph")
-    .help("Character to use to draw ascii art")
+    .help("Characters to use to draw ascii art")
     .default_value("#");
 
   try {
@@ -183,12 +187,12 @@ auto main(int argc, char *argv[]) -> int {
   try {
     Magick::InitializeMagick(*argv);
     const Dimensions artSize = getDimensionsFromCmdline(program);
-    const std::string glyph = program.get<std::string>("--glyph");
-    if (glyph.size() <= 0) {
+    const auto glyphs = program.get<std::string>("--glyph");
+    if (glyphs.empty()) {
       std::cout << "Glyph must be a single non-empty character!" << "\n";
       exit(1);
     }
-    printImageArt(path, artSize.width, artSize.height, glyph[0]);
+    printImageArt(path, artSize.width, artSize.height, glyphs);
   } catch (std::exception &e) {
     std::cout << "Ran into exception! " << e.what() << "\n";
   }
