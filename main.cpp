@@ -102,6 +102,7 @@ Magick::Image getImage(const std::filesystem::path &imagePath) {
   }
 }
 
+template <bool WithBackground>
 void printImageArt(const std::filesystem::path &imagePath, const UInt termWidth,
                    const UInt termHeight, const std::string_view glyphs) {
   const Magick::Image image = getImage(imagePath);
@@ -130,10 +131,17 @@ void printImageArt(const std::filesystem::path &imagePath, const UInt termWidth,
       const auto blue = static_cast<uint8_t>(color.quantumBlue() * 255 /
                                              MAGICK_QUANTUM_RANGE);
 
-      const std::string colorText = std::format(
-          "\x1b[38;2;{};{};{}m{}\x1b[0m", red, green, blue, glyphs[glyphCount]);
-
-      std::cout << colorText;
+      if constexpr (WithBackground) {
+        const std::string colorText =
+            std::format("\x1b[38;2;{};{};{};48;2;0;0;0m{}\x1b[0m", red, green,
+                        blue, glyphs[glyphCount]);
+        std::cout << colorText;
+      } else {
+        const std::string colorText =
+            std::format("\x1b[38;2;{};{};{}m{}\x1b[0m", red, green, blue,
+                        glyphs[glyphCount]);
+        std::cout << colorText;
+      }
 
       glyphCount = (glyphCount + 1) % glyphs.size();
     }
@@ -160,6 +168,10 @@ auto main(int argc, char *argv[]) -> int {
   program.add_argument("-g", "--glyph")
       .help("Characters to use to draw ascii art")
       .default_value("#");
+
+  program.add_argument("-b", "--background")
+    .help("Display dark background behind glphs for visibility")
+    .flag();
 
   try {
     program.parse_args(argc, argv);
@@ -191,7 +203,12 @@ auto main(int argc, char *argv[]) -> int {
       std::cout << "Glyph must be a single non-empty character!" << "\n";
       exit(1);
     }
-    printImageArt(path, artSize.width, artSize.height, glyphs);
+
+    if (program.get<bool>("--background")) {
+      printImageArt<true>(path, artSize.width, artSize.height, glyphs);
+    } else {
+      printImageArt<false>(path, artSize.width, artSize.height, glyphs);
+    }
   } catch (std::exception &e) {
     std::cout << "Ran into exception! " << e.what() << "\n";
   }

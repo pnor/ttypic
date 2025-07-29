@@ -3,6 +3,8 @@
     "arguments": [
       "/usr/bin/g++",
       "-c",
+      "-I./include",
+      "-std=c++23",
       "-Wall",
       "-Wextra",
       "-Werror=switch",
@@ -21,11 +23,11 @@
       "-DMAGICKCORE_QUANTUM_DEPTH=16",
       "-DMAGICKCORE_CHANNEL_MASK_DEPTH=32",
       "-o",
-      "terminal_picture_render",
+      "ttypic",
       "main.cpp"
     ],
     "directory": "/home/phil/dev/src/terminal_picture_render",
     "file": "/home/phil/dev/src/terminal_picture_render/main.cpp",
-    "output": "/home/phil/dev/src/terminal_picture_render/terminal_picture_render"
+    "output": "/home/phil/dev/src/terminal_picture_render/ttypic"
   }
 ]
