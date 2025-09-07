@@ -1,0 +1,31 @@
+#+title: ttypic
+
+ASCII art from pictures using true colors on terminal.
+
+#+attr_html: :width 600px
+[[file:./pictures/example1.png]]
+
+#+attr_html: :width 600px
+[[file:./pictures/example2.png]]
+
+#+attr_html: :width 600px
+[[file:./pictures/example3.png]]
+
+#+begin_src bash
+
+Usage: ttypic [--help] [--version] [--width VAR] [--height VAR] [--glyph VAR] [--background] image_path
+
+Print a picture as ASCII art
+
+Positional arguments:
+  image_path        Path of image to display
+
+Optional arguments:
+  -h, --help        shows help message and exits
+  -v, --version     prints version information and exits
+  -w, --width       Width in characters of output image
+  -h, --height      Height in characters of output image
+  -g, --glyph       Characters to use to draw ascii art [nargs=0..1] [default: "#"]
+  -b, --background  Display dark background behind glphs for visibility
+
+#+end_src
